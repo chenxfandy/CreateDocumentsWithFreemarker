@@ -3,7 +3,6 @@ package com.jitin.createdocswithfreemarker.dto;
 import com.jitin.createdocswithfreemarker.utility.DocumentType;
 
 public class DocumentRequestDTO<T> {
-	private String documentName;
 	private DocumentType documentType;
 	private String templateName;
 	private String watermark;
@@ -12,27 +11,18 @@ public class DocumentRequestDTO<T> {
 	public DocumentRequestDTO() {
 	}
 
-	public DocumentRequestDTO(String documentName, DocumentType documentType, String templateName, T data) {
+	public DocumentRequestDTO(DocumentType documentType, String templateName, T data) {
 		super();
-		this.documentName = documentName;
 		this.documentType = documentType;
 		this.templateName = templateName;
 		this.data = data;
 	}
-	public DocumentRequestDTO(String documentName, DocumentType documentType, String templateName, String watermark, T data) {
+	public DocumentRequestDTO(DocumentType documentType, String templateName, String watermark, T data) {
 		super();
-		this.documentName = documentName;
 		this.documentType = documentType;
 		this.templateName = templateName;
 		this.watermark = watermark;
 		this.data = data;
-	}
-	public String getDocumentName() {
-		return documentName;
-	}
-
-	public void setDocumentName(String documentName) {
-		this.documentName = documentName;
 	}
 
 	public DocumentType getDocumentType() {
