@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.itextpdf.text.Document;
@@ -24,60 +22,51 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
-
-import com.jitin.createdocswithfreemarker.dto.DocumentRequestDTO;
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
 import com.jitin.createdocswithfreemarker.utility.Constants;
-import com.jitin.createdocswithfreemarker.utility.FreemarkerTemplateProcessor;
 
-public class GeneratePdfImpl implements GenerateDocument{
-	private static final Logger LOG = LoggerFactory.getLogger(GeneratePdfImpl.class);
-	
-	//--Call this method when you want to generate pdf without parsing XHTML content into XMLWorkerHelper.
-	/*public byte[] createDocument(DocumentRequestDTO documentRequestDTO) {
-		String processTemplateText = FreemarkerTemplateProcessor.processFreemarkerTemplateFromFile(documentRequestDTO);
-		LOG.info("Processed text : {}",processTemplateText);
+public class PdfProducer implements DocumentProducer {
+	// --Call this method when you want to generate pdf with parsing XHTML content into XMLWorkerHelper.
+	public byte[] generateDocumentFromProcessedText(String processedText, String watermark) {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		Document document = new Document();
+		try {
+			PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
+			document.open();
+			XMLWorkerHelper xMLWorkerHelper = XMLWorkerHelper.getInstance();
+			InputStream inputStream = new ByteArrayInputStream(processedText.getBytes(StandardCharsets.UTF_8));
+			xMLWorkerHelper.parseXHtml(writer, document, inputStream, Charset.forName(Constants.DEFAULT_ENCODING));
+			document.close();
+			if (null != watermark && watermark != "") {
+				return applyWatermark(byteArrayOutputStream.toByteArray(), watermark);
+			} else {
+				return byteArrayOutputStream.toByteArray();
+			}
+		} catch (Exception e) {
+			System.out.println("Error occurred : "+e);
+			throw new DocumentGeneratorException("Error while creating Pdf!");
+		}
+	}
+
+	// --Call this method when you want to generate pdf without parsing XHTML content into XMLWorkerHelper.
+	/*private byte[] generateDocumentFromProcessedText(String processedtext, String watermark) {
 		ITextRenderer renderer = new ITextRenderer();
-		renderer.setDocumentFromString(processTemplateText);
+		renderer.setDocumentFromString(processedtext);
 		renderer.getDocument();
 		renderer.layout();
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		try {
 			renderer.createPDF(byteArrayOutputStream);
-			if (null!=documentRequestDTO.getWatermark() && documentRequestDTO.getWatermark()!="") {
-				return applyWatermark(byteArrayOutputStream.toByteArray(), documentRequestDTO.getWatermark());
+			if (null != watermark && watermark != "") {
+				return applyWatermark(byteArrayOutputStream.toByteArray(), watermark);
 			} else {
 				return byteArrayOutputStream.toByteArray();
 			}
 		} catch (Exception e) {
-			LOG.error("Error occurred : {}",e);
+			System.out.println("Error occurred : "+e);
 			throw new DocumentGeneratorException("Error while creating Pdf!");
 		}
 	}*/
-	
-	//--Call this method when you want to generate pdf with parsing XHTML content into XMLWorkerHelper.
-	public byte[] createDocument(DocumentRequestDTO documentRequestDTO) {
-		String processTemplateText = FreemarkerTemplateProcessor.processFreemarkerTemplateFromFile(documentRequestDTO);
-		System.out.println("Processed text : "+processTemplateText);
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		Document document=new Document();
-		try {
-			PdfWriter writer=PdfWriter.getInstance(document, byteArrayOutputStream);
-			document.open();
-			XMLWorkerHelper xMLWorkerHelper=XMLWorkerHelper.getInstance();
-			InputStream inputStream=new ByteArrayInputStream(processTemplateText.getBytes(StandardCharsets.UTF_8));
-			xMLWorkerHelper.parseXHtml(writer, document,inputStream,Charset.forName(Constants.DEFAULT_ENCODING));
-			document.close();
-			if (null!=documentRequestDTO.getWatermark() && documentRequestDTO.getWatermark()!="") {
-				return applyWatermark(byteArrayOutputStream.toByteArray(), documentRequestDTO.getWatermark());
-			} else {
-				return byteArrayOutputStream.toByteArray();
-			}
-		} catch (Exception e) {
-			LOG.error("Error occurred : {}",e);
-			throw new DocumentGeneratorException("Error while creating Pdf!");
-		}
-	}
 
 	private byte[] applyWatermark(byte[] source, String watermarkValue) throws IOException, DocumentException {
 		PdfReader reader = new PdfReader(source);

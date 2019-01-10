@@ -1,28 +1,37 @@
-package com.jitin.createdocswithfreemarker.dto;
+package com.jitin.createdocswithfreemarker.model;
 
-import com.jitin.createdocswithfreemarker.utility.DocumentType;
-
-public class DocumentRequestDTO<T> {
+public class DocumentRequest<T> {
+	private TemplateEngine templateEngine;
 	private DocumentType documentType;
 	private String templateName;
 	private String watermark;
 	private T data;
 
-	public DocumentRequestDTO() {
+	public DocumentRequest() {
 	}
 
-	public DocumentRequestDTO(DocumentType documentType, String templateName, T data) {
+	public DocumentRequest(TemplateEngine templateEngine,DocumentType documentType, String templateName, T data) {
 		super();
+		this.templateEngine=templateEngine;
 		this.documentType = documentType;
 		this.templateName = templateName;
 		this.data = data;
 	}
-	public DocumentRequestDTO(DocumentType documentType, String templateName, String watermark, T data) {
+	public DocumentRequest(TemplateEngine templateEngine,DocumentType documentType, String templateName, String watermark, T data) {
 		super();
+		this.templateEngine=templateEngine;
 		this.documentType = documentType;
 		this.templateName = templateName;
 		this.watermark = watermark;
 		this.data = data;
+	}
+
+	public TemplateEngine getTemplateEngine() {
+		return templateEngine;
+	}
+
+	public void setTemplateEngine(TemplateEngine templateEngine) {
+		this.templateEngine = templateEngine;
 	}
 
 	public DocumentType getDocumentType() {

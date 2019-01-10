@@ -1,19 +1,19 @@
-package com.jitin.createdocswithfreemarker.dto;
+package com.jitin.createdocswithfreemarker.model;
 
-public class StudentDTO {
+public class Student {
 	private String college;
 	private Integer rollNumber;
 	private String name;
 	private Double percentage;
 	private Boolean isPass;
-	private AddressDTO address;
+	private Address address;
 
-	public StudentDTO() {
+	public Student() {
 
 	}
 
-	public StudentDTO(String college, Integer rollNumber, String name, Double percentage, Boolean isPass,
-			AddressDTO address) {
+	public Student(String college, Integer rollNumber, String name, Double percentage, Boolean isPass,
+			Address address) {
 		super();
 		this.college = college;
 		this.rollNumber = rollNumber;
@@ -63,11 +63,11 @@ public class StudentDTO {
 		this.isPass = isPass;
 	}
 
-	public AddressDTO getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(AddressDTO address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 

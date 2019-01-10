@@ -10,19 +10,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.jitin.createdocswithfreemarker.dto.DocumentRequestDTO;
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
 import com.jitin.createdocswithfreemarker.utility.Constants;
-import com.jitin.createdocswithfreemarker.utility.FreemarkerTemplateProcessor;
 
-public class GenerateCsvImpl implements GenerateDocument{
-	private static final Logger LOG = LoggerFactory.getLogger(GenerateCsvImpl.class);
-	public byte[] createDocument(DocumentRequestDTO documentRequestDTO) {
-		String processedText = FreemarkerTemplateProcessor.processFreemarkerTemplateFromFile(documentRequestDTO);
-		LOG.info("Processed text : {}",processedText);
+public class CsvProducer implements DocumentProducer{
+	
+	public byte[] generateDocumentFromProcessedText(String processedText, String watermark) {
 		Document document = Jsoup.parse(processedText);
 		Elements tables = document.getElementsByTag(Constants.HTML_TABLE);
 		Writer writer = null;
@@ -45,19 +39,20 @@ public class GenerateCsvImpl implements GenerateDocument{
 				}
 				writer.write("\n");
 			}
-			LOG.info("CSV file has been successfully written!");
+			System.out.println("CSV file has been successfully written!");
 		} catch (Exception e) {
-			LOG.error("Error occurred : {}",e);
+			System.out.println("Error occurred : "+e);
 			throw new DocumentGeneratorException("Error while creating csv!");
 		} finally {
 			try {
 				writer.close();
 			} catch (IOException e) {
-				LOG.error("Error occurred : {}",e);
+				System.out.println("Error occurred : "+e);
 			}
 		}
 		return byteArrayOutputStream.toByteArray();
 	}
+	
 	private void writeData(Writer writer, Elements cells) {
 		try {
 			for (Element cell : cells) {
@@ -65,7 +60,7 @@ public class GenerateCsvImpl implements GenerateDocument{
 			}
 			writer.write("\n");
 		} catch (Exception e) {
-			LOG.error("Error occurred : {}",e);
+			System.out.println("Error occurred : "+e);
 			throw new DocumentGeneratorException("Error while creating csv!");
 		}
 	}

@@ -1,16 +1,16 @@
-package com.jitin.createdocswithfreemarker.dto;
+package com.jitin.createdocswithfreemarker.model;
 
-public class AddressDTO {
+public class Address {
 	private String Street;
 	private String city;
 	private String state;
 	private Integer housenumber;
 
-	public AddressDTO() {
+	public Address() {
 
 	}
 
-	public AddressDTO(Integer housenumber,String street, String city, String state) {
+	public Address(Integer housenumber,String street, String city, String state) {
 		super();
 		Street = street;
 		this.city = city;
