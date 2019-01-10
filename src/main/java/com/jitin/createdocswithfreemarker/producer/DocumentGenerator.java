@@ -1,4 +1,4 @@
-package com.jitin.createdocswithfreemarker.docfactory;
+package com.jitin.createdocswithfreemarker.producer;
 
 import com.jitin.createdocswithfreemarker.factory.DocumentFactory;
 import com.jitin.createdocswithfreemarker.factory.TemplateEngineFactory;
@@ -11,6 +11,6 @@ public abstract class DocumentGenerator {
 		String processedtext = templateProcessor.getProcessedText(documentRequestDTO);
 		System.out.println("Processed text : " + processedtext);
 		DocumentProducer generateDocument = DocumentFactory.getInstance(documentRequestDTO.getDocumentType());
-		return generateDocument.generateDocumentFromProcessedText(processedtext,documentRequestDTO.getWatermark());
+		return generateDocument.generateDocumentFromProcessedText(processedtext, documentRequestDTO.getWatermark());
 	}
 }

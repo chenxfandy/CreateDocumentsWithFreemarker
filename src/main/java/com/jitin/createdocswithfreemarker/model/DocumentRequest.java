@@ -10,16 +10,18 @@ public class DocumentRequest<T> {
 	public DocumentRequest() {
 	}
 
-	public DocumentRequest(TemplateEngine templateEngine,DocumentType documentType, String templateName, T data) {
+	public DocumentRequest(TemplateEngine templateEngine, DocumentType documentType, String templateName, T data) {
 		super();
-		this.templateEngine=templateEngine;
+		this.templateEngine = templateEngine;
 		this.documentType = documentType;
 		this.templateName = templateName;
 		this.data = data;
 	}
-	public DocumentRequest(TemplateEngine templateEngine,DocumentType documentType, String templateName, String watermark, T data) {
+
+	public DocumentRequest(TemplateEngine templateEngine, DocumentType documentType, String templateName,
+			String watermark, T data) {
 		super();
-		this.templateEngine=templateEngine;
+		this.templateEngine = templateEngine;
 		this.documentType = documentType;
 		this.templateName = templateName;
 		this.watermark = watermark;

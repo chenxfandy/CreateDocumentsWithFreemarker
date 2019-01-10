@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import com.jitin.createdocswithfreemarker.docfactory.DocumentGenerator;
 import com.jitin.createdocswithfreemarker.model.Address;
 import com.jitin.createdocswithfreemarker.model.DocumentRequest;
 import com.jitin.createdocswithfreemarker.model.DocumentType;
 import com.jitin.createdocswithfreemarker.model.Student;
 import com.jitin.createdocswithfreemarker.model.TemplateEngine;
+import com.jitin.createdocswithfreemarker.producer.DocumentGenerator;
 import com.jitin.createdocswithfreemarker.utility.Constants;
 import com.jitin.createdocswithfreemarker.utility.FileNameGenerator;
 
@@ -20,7 +20,7 @@ public class EntryClass {
 		Student studentDTO = new Student("Test College of Technology", 12, "Test Student", 89.7, Boolean.TRUE,
 				addressDTO);
 		DocumentRequest documentRequestDTO = new DocumentRequest(TemplateEngine.VELOCITY, DocumentType.CSV,
-				"studentReport.vm",studentDTO);
+				"studentReport.vm", studentDTO);
 		byte[] fileContent = DocumentGenerator.generateDocument(documentRequestDTO);
 		String filename = FileNameGenerator.generateFileName(documentRequestDTO.getDocumentType());
 		try {

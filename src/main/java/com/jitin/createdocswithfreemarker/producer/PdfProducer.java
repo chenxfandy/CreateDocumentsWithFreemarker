@@ -1,4 +1,4 @@
-package com.jitin.createdocswithfreemarker.docfactory;
+package com.jitin.createdocswithfreemarker.producer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,6 +26,7 @@ import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
 import com.jitin.createdocswithfreemarker.utility.Constants;
 
 public class PdfProducer implements DocumentProducer {
+	
 	// --Call this method when you want to generate pdf with parsing XHTML content into XMLWorkerHelper.
 	public byte[] generateDocumentFromProcessedText(String processedText, String watermark) {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

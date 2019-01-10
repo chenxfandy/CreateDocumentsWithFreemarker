@@ -33,9 +33,7 @@ public class FreemarkerTemplateProcessor implements TemplateProcessor {
 	public static String processFreemarkerTemplateFromString(DocumentRequest documentRequestDTO) {
 		Configuration configuration = new Configuration(Configuration.VERSION_2_3_26);
 		StringTemplateLoader stringTemplateLoader = new StringTemplateLoader();
-		stringTemplateLoader.putTemplate(documentRequestDTO.getTemplateName(), "templateContent"); // --Pass template
-																									// content as
-																									// String.
+		stringTemplateLoader.putTemplate(documentRequestDTO.getTemplateName(), "templateContent"); // --Pass template content as String.
 		configuration.setTemplateLoader(stringTemplateLoader);
 		return processFreemarkerTemplate(configuration, documentRequestDTO);
 	}

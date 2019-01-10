@@ -1,4 +1,4 @@
-package com.jitin.createdocswithfreemarker.docfactory;
+package com.jitin.createdocswithfreemarker.producer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
 import com.jitin.createdocswithfreemarker.utility.Constants;
 
 public class ExcelProducer implements DocumentProducer {
-	
+
 	public byte[] generateDocumentFromProcessedText(String processedText, String watermark) {
 		Document document = Jsoup.parse(processedText);
 		Elements tables = document.getElementsByTag(Constants.HTML_TABLE);
@@ -44,13 +44,13 @@ public class ExcelProducer implements DocumentProducer {
 			workbook.write(byteArrayOutputStream);
 			System.out.println("Excel file has been successfully written!");
 		} catch (Exception e) {
-			System.out.println("Error occurred : "+e);
+			System.out.println("Error occurred : " + e);
 			throw new DocumentGeneratorException("Error while creating excel!");
 		} finally {
 			try {
 				workbook.close();
 			} catch (IOException e) {
-				System.out.println("Error occurred : "+e);
+				System.out.println("Error occurred : " + e);
 			}
 		}
 		return byteArrayOutputStream.toByteArray();
