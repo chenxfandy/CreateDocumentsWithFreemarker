@@ -7,6 +7,10 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.jitin.createdocswithfreemarker.docfactory.GenerateCsvImpl;
 import com.jitin.createdocswithfreemarker.dto.DocumentRequestDTO;
 
 import freemarker.cache.StringTemplateLoader;
@@ -16,6 +20,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
 public class FreemarkerTemplateProcessor {
+	private static final Logger LOG = LoggerFactory.getLogger(FreemarkerTemplateProcessor.class);
 	public static String processFreemarkerTemplateFromFile(DocumentRequestDTO documentRequestDTO) {
 		String processedText = "";
 		try {
@@ -23,7 +28,7 @@ public class FreemarkerTemplateProcessor {
 			configuration.setDirectoryForTemplateLoading(new File(Constants.TEMPLATE_DIRECTORY));
 			processedText = processFreemarkerTemplate(configuration,documentRequestDTO);
 		} catch (IOException e) {
-			System.out.println("Error occurred : "+e);
+			LOG.error("Error occurred : {}",e);
 		}
 		return processedText;
 	}
@@ -50,10 +55,10 @@ public class FreemarkerTemplateProcessor {
 				template.process(root, writer);
 				processedText = processTemplateIntoString(template, root);
 			} catch (TemplateException e) {
-				System.out.println("Error occurred : "+e);
+				LOG.error("Error occurred : {}",e);
 			}
 		} catch (IOException e) {
-			System.out.println("Error occurred : "+e);
+			LOG.error("Error occurred : {}",e);
 		}
 		return processedText;
 	}

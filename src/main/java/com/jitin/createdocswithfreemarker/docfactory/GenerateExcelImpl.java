@@ -11,6 +11,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jitin.createdocswithfreemarker.dto.DocumentRequestDTO;
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
@@ -18,10 +20,10 @@ import com.jitin.createdocswithfreemarker.utility.Constants;
 import com.jitin.createdocswithfreemarker.utility.FreemarkerTemplateProcessor;
 
 public class GenerateExcelImpl implements GenerateDocument {
-
+	private static final Logger LOG = LoggerFactory.getLogger(GenerateExcelImpl.class);
 	public byte[] createDocument(DocumentRequestDTO documentRequestDTO) {
 		String processedText = FreemarkerTemplateProcessor.processFreemarkerTemplateFromFile(documentRequestDTO);
-		System.out.println("Processed text : "+processedText);
+		LOG.info("Processed text : {}",processedText);
 		Document document = Jsoup.parse(processedText);
 		Elements tables = document.getElementsByTag(Constants.HTML_TABLE);
 		HSSFWorkbook workbook = new HSSFWorkbook();
@@ -46,15 +48,15 @@ public class GenerateExcelImpl implements GenerateDocument {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		try {
 			workbook.write(byteArrayOutputStream);
-			System.out.println("Excel file has been successfully written!");
+			LOG.info("Excel file has been successfully written!");
 		} catch (Exception e) {
-			System.out.println("Error occurred : " + e);
+			LOG.error("Error occurred : {}",e);
 			throw new DocumentGeneratorException("Error while creating excel!");
 		} finally {
 			try {
 				workbook.close();
 			} catch (IOException e) {
-				System.out.println("Error occurred : " + e);
+				LOG.error("Error occurred : {}",e);
 			}
 		}
 		return byteArrayOutputStream.toByteArray();
