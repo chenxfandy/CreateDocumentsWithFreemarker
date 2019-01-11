@@ -1,7 +1,7 @@
 package com.jitin.createdocswithfreemarker.model;
 
 public class Address {
-	private String Street;
+	private String street;
 	private String city;
 	private String state;
 	private Integer housenumber;
@@ -12,18 +12,18 @@ public class Address {
 
 	public Address(Integer housenumber, String street, String city, String state) {
 		super();
-		Street = street;
+		this.street = street;
 		this.city = city;
 		this.state = state;
 		this.housenumber = housenumber;
 	}
 
 	public String getStreet() {
-		return Street;
+		return street;
 	}
 
 	public void setStreet(String street) {
-		Street = street;
+		this.street = street;
 	}
 
 	public String getCity() {

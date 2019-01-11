@@ -19,7 +19,7 @@ public class EntryClass {
 		Address addressDTO = new Address(23, "Test street", "Test city", "Test state");
 		Student studentDTO = new Student("Test College of Technology", 12, "Test Student", 89.7, Boolean.TRUE,
 				addressDTO);
-		DocumentRequest documentRequestDTO = new DocumentRequest(TemplateEngine.VELOCITY, DocumentType.CSV,
+		DocumentRequest documentRequestDTO = new DocumentRequest(TemplateEngine.VELOCITY, DocumentType.PDF,
 				"studentReport.vm", studentDTO);
 		byte[] fileContent = DocumentGenerator.generateDocument(documentRequestDTO);
 		String filename = FileNameGenerator.generateFileName(documentRequestDTO.getDocumentType());
