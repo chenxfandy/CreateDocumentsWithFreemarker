@@ -7,9 +7,12 @@ import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
 import com.jitin.createdocswithfreemarker.model.DocumentType;
 
 public class FileNameGenerator {
-	public static String generateFileName(DocumentType documentType) {
-		StringBuilder fileName = new StringBuilder(Constants.FILE_NAME_PREFIX);
-		fileName.append(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
+	private FileNameGenerator() {
+		
+	}
+	public static String generateFileName(String prefix, DocumentType documentType) {
+		StringBuilder fileName = new StringBuilder(prefix).append("_")
+				.append(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()));
 		switch (documentType) {
 		case PDF:
 			return fileName.append(".pdf").toString();

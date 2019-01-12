@@ -2,7 +2,10 @@
 <body>
 <table style="width:100%;border: 1px solid black;">
 <tr>
-<td><center><h2>${data.college}</h2></center></td>
+<td><center><h2>
+<#if data.college??>
+${data.college}
+</#if></h2></center></td>
 </tr>
 </table>
 <table style="width:100%;border: 1px solid black;">
