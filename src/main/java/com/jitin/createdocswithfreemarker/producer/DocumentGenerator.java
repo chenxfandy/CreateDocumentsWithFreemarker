@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
 import com.jitin.createdocswithfreemarker.factory.DocumentFactory;
 import com.jitin.createdocswithfreemarker.factory.TemplateEngineFactory;
@@ -31,7 +29,7 @@ public class DocumentGenerator {
 			String processedText = templateProcessor.getProcessedText(documentRequest.getTemplateEngine());
 			documentRequest.setProcessedText(processedText);
 			return getDocument(documentRequest);
-		} else if (StringUtils.isNotBlank(documentRequest.getProcessedText())) {
+		} else if (null != documentRequest.getProcessedText() && documentRequest.getProcessedText() != "") {
 			return getDocument(documentRequest);
 		} else {
 			throw new DocumentGeneratorException("Some required properties were missing!");
@@ -39,13 +37,13 @@ public class DocumentGenerator {
 	}
 
 	public static void generateDocument(String outputDirectory, String fileName, DocumentRequest documentRequest) {
-		if (StringUtils.isBlank(fileName)) {
+		if (null != fileName && fileName != "") {
+			fileName = FileNameGenerator.generateFileName(fileName, documentRequest.getDocumentType());
+		} else {
 			fileName = FileNameGenerator.generateFileName(DocumentGeneratorConstants.FILE_NAME_PREFIX,
 					documentRequest.getDocumentType());
-		} else {
-			fileName = FileNameGenerator.generateFileName(fileName, documentRequest.getDocumentType());
 		}
-		if (StringUtils.isNotBlank(outputDirectory)) {
+		if (null != outputDirectory && outputDirectory != "") {
 			byte[] document = generateDocument(documentRequest);
 			StringBuilder file = new StringBuilder(outputDirectory).append("/").append(fileName);
 			try {

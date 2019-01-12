@@ -3,7 +3,6 @@ package com.jitin.createdocswithfreemarker.templateprocessor;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -20,10 +19,9 @@ public class VelocityTemplateProcessor implements TemplateProcessor {
 
 	public String getProcessedText(TemplateEngine templateEngine) {
 		Template template;
-		if (StringUtils.isNotBlank(templateEngine.getTemplateText())) {
+		if (null != templateEngine.getTemplateText()) {
 			template = this.processTemplateFromString(templateEngine.getTemplateText());
-		} else if (StringUtils.isNotBlank(templateEngine.getTemplateDirectory())
-				&& StringUtils.isNotBlank(templateEngine.getTemplateName())) {
+		} else if (null != templateEngine.getTemplateDirectory() && templateEngine.getTemplateName() != "") {
 			template = this.processTemplateFromFile(templateEngine.getTemplateDirectory(),
 					templateEngine.getTemplateName());
 		} else {

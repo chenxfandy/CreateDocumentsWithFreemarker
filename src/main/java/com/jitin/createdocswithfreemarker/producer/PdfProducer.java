@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.lang.StringUtils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.itextpdf.text.Document;
@@ -40,7 +39,7 @@ public class PdfProducer implements DocumentProducer {
 			InputStream inputStream = new ByteArrayInputStream(documentRequest.getProcessedText().getBytes(StandardCharsets.UTF_8));
 			xMLWorkerHelper.parseXHtml(writer, document, inputStream, Charset.forName(DocumentGeneratorConstants.DEFAULT_ENCODING));
 			document.close();
-			if (StringUtils.isNotBlank(documentRequest.getWatermark())) {
+			if (null!=documentRequest.getWatermark() && documentRequest.getWatermark()!="") {
 				return applyWatermark(byteArrayOutputStream.toByteArray(), documentRequest.getWatermark());
 			} else {
 				return byteArrayOutputStream.toByteArray();
@@ -60,7 +59,7 @@ public class PdfProducer implements DocumentProducer {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		try {
 			renderer.createPDF(byteArrayOutputStream);
-			if (StringUtils.isNotBlank(documentRequest.getWatermark())) {
+			if (null!=documentRequest.getWatermark() && documentRequest.getWatermark()!="") {
 				return applyWatermark(byteArrayOutputStream.toByteArray(), documentRequest.getWatermark());
 			} else {
 				return byteArrayOutputStream.toByteArray();

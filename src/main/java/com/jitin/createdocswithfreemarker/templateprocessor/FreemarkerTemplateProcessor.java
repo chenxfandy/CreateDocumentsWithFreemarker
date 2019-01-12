@@ -7,8 +7,6 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
 import com.jitin.createdocswithfreemarker.model.TemplateEngine;
 import com.jitin.createdocswithfreemarker.utility.DocumentGeneratorConstants;
@@ -30,10 +28,9 @@ public class FreemarkerTemplateProcessor implements TemplateProcessor {
 		configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		configuration.setLogTemplateExceptions(false);
 		String templateName = DocumentGeneratorConstants.DEFAULT_TEMPLATE_NAME;
-		if (StringUtils.isNotBlank(templateEngine.getTemplateText())) {
+		if (null != templateEngine.getTemplateText() && templateEngine.getTemplateText() != "") {
 			this.processTemplateFromString(configuration, templateName, templateEngine.getTemplateText());
-		} else if (StringUtils.isNotBlank(templateEngine.getTemplateDirectory())
-				&& StringUtils.isNotBlank(templateEngine.getTemplateName())) {
+		} else if (null != templateEngine.getTemplateDirectory() && templateEngine.getTemplateName() != "") {
 			templateName = templateEngine.getTemplateName();
 			this.processTemplateFromFile(configuration, templateEngine.getTemplateDirectory(), templateName);
 		} else {
