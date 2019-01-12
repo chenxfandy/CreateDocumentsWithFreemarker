@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jitin.createdocswithfreemarker.model.DocumentRequest;
 import com.jitin.createdocswithfreemarker.model.DocumentType;
 import com.jitin.createdocswithfreemarker.model.Engine;
@@ -16,7 +13,6 @@ import com.jitin.createdocswithfreemarker.producer.DocumentGenerator;
 import com.jitin.createdocswithfreemarker.utility.FileNameGenerator;
 
 public class EntryClass {
-	private static final Logger LOG = LoggerFactory.getLogger(EntryClass.class);
 
 	public static void main(String[] args) {
 
