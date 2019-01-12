@@ -10,8 +10,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
-import com.jitin.createdocswithfreemarker.model.DocumentRequest;
-import com.jitin.createdocswithfreemarker.utility.Constants;
+import com.jitin.createdocswithfreemarker.model.TemplateEngine;
+import com.jitin.createdocswithfreemarker.utility.DocumentGeneratorConstants;
 
 import freemarker.cache.StringTemplateLoader;
 import freemarker.core.ParseException;
@@ -24,18 +24,18 @@ import freemarker.template.TemplateNotFoundException;
 
 public class FreemarkerTemplateProcessor implements TemplateProcessor {
 
-	public String getProcessedText(DocumentRequest documentRequest) {
+	public String getProcessedText(TemplateEngine templateEngine) {
 		Configuration configuration = new Configuration(Configuration.VERSION_2_3_26);
-		configuration.setDefaultEncoding(Constants.DEFAULT_ENCODING);
+		configuration.setDefaultEncoding(DocumentGeneratorConstants.DEFAULT_ENCODING);
 		configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		configuration.setLogTemplateExceptions(false);
-		String templateName = Constants.DEFAULT_TEMPLATE_NAME;
-		if (StringUtils.isNotBlank(documentRequest.getTemplateText())) {
-			this.processTemplateFromString(configuration, templateName, documentRequest.getTemplateText());
-		} else if (StringUtils.isNotBlank(documentRequest.getTemplateDirectory())
-				&& StringUtils.isNotBlank(documentRequest.getTemplateName())) {
-			templateName = documentRequest.getTemplateName();
-			this.processTemplateFromFile(configuration, documentRequest.getTemplateDirectory(), templateName);
+		String templateName = DocumentGeneratorConstants.DEFAULT_TEMPLATE_NAME;
+		if (StringUtils.isNotBlank(templateEngine.getTemplateText())) {
+			this.processTemplateFromString(configuration, templateName, templateEngine.getTemplateText());
+		} else if (StringUtils.isNotBlank(templateEngine.getTemplateDirectory())
+				&& StringUtils.isNotBlank(templateEngine.getTemplateName())) {
+			templateName = templateEngine.getTemplateName();
+			this.processTemplateFromFile(configuration, templateEngine.getTemplateDirectory(), templateName);
 		} else {
 			throw new DocumentGeneratorException("Some required properties were null or empty!");
 		}
@@ -43,7 +43,7 @@ public class FreemarkerTemplateProcessor implements TemplateProcessor {
 		Template template;
 		try {
 			template = configuration.getTemplate(templateName);
-			processedText = processTemplate(template, documentRequest.getData());
+			processedText = processTemplate(template, templateEngine.getContext(), templateEngine.getData());
 		} catch (TemplateNotFoundException e) {
 			System.out.println("Error occurred : " + e);
 		} catch (MalformedTemplateNameException e) {
@@ -70,11 +70,11 @@ public class FreemarkerTemplateProcessor implements TemplateProcessor {
 		}
 	}
 
-	private String processTemplate(Template template, Object data) {
+	private String processTemplate(Template template, String contextName, Object data) {
 		String processedText = "";
 		try {
 			Map<String, Object> root = new HashMap<String, Object>();
-			root.put(Constants.GENERIC_DATA_MAP_KEY, data);
+			root.put(contextName, data);
 			Writer writer = new StringWriter();
 			try {
 				template.process(root, writer);

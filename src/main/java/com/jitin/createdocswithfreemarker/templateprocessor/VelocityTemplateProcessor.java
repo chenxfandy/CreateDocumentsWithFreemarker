@@ -13,23 +13,23 @@ import org.apache.velocity.runtime.parser.ParseException;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
 
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
-import com.jitin.createdocswithfreemarker.model.DocumentRequest;
-import com.jitin.createdocswithfreemarker.utility.Constants;
+import com.jitin.createdocswithfreemarker.model.TemplateEngine;
+import com.jitin.createdocswithfreemarker.utility.DocumentGeneratorConstants;
 
 public class VelocityTemplateProcessor implements TemplateProcessor {
 
-	public String getProcessedText(DocumentRequest documentRequest){
+	public String getProcessedText(TemplateEngine templateEngine) {
 		Template template;
-		if (StringUtils.isNotBlank(documentRequest.getTemplateText())) {
-			template = this.processTemplateFromString(documentRequest.getTemplateText());
-		} else if (StringUtils.isNotBlank(documentRequest.getTemplateDirectory())
-				&& StringUtils.isNotBlank(documentRequest.getTemplateName())) {
-			template = this.processTemplateFromFile(documentRequest.getTemplateDirectory(),
-					documentRequest.getTemplateName());
+		if (StringUtils.isNotBlank(templateEngine.getTemplateText())) {
+			template = this.processTemplateFromString(templateEngine.getTemplateText());
+		} else if (StringUtils.isNotBlank(templateEngine.getTemplateDirectory())
+				&& StringUtils.isNotBlank(templateEngine.getTemplateName())) {
+			template = this.processTemplateFromFile(templateEngine.getTemplateDirectory(),
+					templateEngine.getTemplateName());
 		} else {
 			throw new DocumentGeneratorException("Some required properties were null or empty!");
 		}
-		return this.processTemplate(template, documentRequest.getData());
+		return this.processTemplate(template, templateEngine.getContext(), templateEngine.getData());
 	}
 
 	private Template processTemplateFromFile(String templateDirectory, String templateName) {
@@ -45,7 +45,7 @@ public class VelocityTemplateProcessor implements TemplateProcessor {
 		SimpleNode simpleNode;
 		Template template = new Template();
 		try {
-			simpleNode = runtimeServices.parse(stringReader, Constants.DEFAULT_TEMPLATE_NAME);
+			simpleNode = runtimeServices.parse(stringReader, DocumentGeneratorConstants.DEFAULT_TEMPLATE_NAME);
 			template.setRuntimeServices(runtimeServices);
 			template.setData(simpleNode);
 			template.initDocument();
@@ -55,9 +55,9 @@ public class VelocityTemplateProcessor implements TemplateProcessor {
 		return template;
 	}
 
-	private String processTemplate(Template template, Object data) {
+	private String processTemplate(Template template, String contextName, Object data) {
 		VelocityContext velocityContext = new VelocityContext();
-		velocityContext.put(Constants.GENERIC_DATA_MAP_KEY, data);
+		velocityContext.put(contextName, data);
 
 		StringWriter stringWriter = new StringWriter();
 		template.merge(velocityContext, stringWriter);

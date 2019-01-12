@@ -1,4 +1,4 @@
-package com.jitin.createdocswithfreemarker.model;
+package com.jitin.createdocswithfreemarker;
 
 public class Student {
 	private String college;

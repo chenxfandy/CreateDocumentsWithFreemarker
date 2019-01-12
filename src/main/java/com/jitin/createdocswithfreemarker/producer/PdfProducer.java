@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.lang.StringUtils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.itextpdf.text.Document;
@@ -23,23 +24,24 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
-import com.jitin.createdocswithfreemarker.utility.Constants;
+import com.jitin.createdocswithfreemarker.model.DocumentRequest;
+import com.jitin.createdocswithfreemarker.utility.DocumentGeneratorConstants;
 
 public class PdfProducer implements DocumentProducer {
 	
 	// --Call this method when you want to generate pdf with parsing XHTML content into XMLWorkerHelper.
-	public byte[] generateDocumentFromProcessedText(String processedText, String watermark) {
+	public byte[] generateDocumentFromProcessedText(DocumentRequest documentRequest) {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		Document document = new Document();
 		try {
 			PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
 			document.open();
 			XMLWorkerHelper xMLWorkerHelper = XMLWorkerHelper.getInstance();
-			InputStream inputStream = new ByteArrayInputStream(processedText.getBytes(StandardCharsets.UTF_8));
-			xMLWorkerHelper.parseXHtml(writer, document, inputStream, Charset.forName(Constants.DEFAULT_ENCODING));
+			InputStream inputStream = new ByteArrayInputStream(documentRequest.getProcessedText().getBytes(StandardCharsets.UTF_8));
+			xMLWorkerHelper.parseXHtml(writer, document, inputStream, Charset.forName(DocumentGeneratorConstants.DEFAULT_ENCODING));
 			document.close();
-			if (null != watermark && watermark != "") {
-				return applyWatermark(byteArrayOutputStream.toByteArray(), watermark);
+			if (StringUtils.isNotBlank(documentRequest.getWatermark())) {
+				return applyWatermark(byteArrayOutputStream.toByteArray(), documentRequest.getWatermark());
 			} else {
 				return byteArrayOutputStream.toByteArray();
 			}
@@ -50,16 +52,16 @@ public class PdfProducer implements DocumentProducer {
 	}
 
 	// --Call this method when you want to generate pdf without parsing XHTML content into XMLWorkerHelper.
-	/*private byte[] generateDocumentFromProcessedText(String processedtext, String watermark) {
+	/*private byte[] generateDocumentFromProcessedText(DocRequest documentRequest) {
 		ITextRenderer renderer = new ITextRenderer();
-		renderer.setDocumentFromString(processedtext);
+		renderer.setDocumentFromString(documentRequest.getProcessedText());
 		renderer.getDocument();
 		renderer.layout();
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		try {
 			renderer.createPDF(byteArrayOutputStream);
-			if (null != watermark && watermark != "") {
-				return applyWatermark(byteArrayOutputStream.toByteArray(), watermark);
+			if (StringUtils.isNotBlank(documentRequest.getWatermark())) {
+				return applyWatermark(byteArrayOutputStream.toByteArray(), documentRequest.getWatermark());
 			} else {
 				return byteArrayOutputStream.toByteArray();
 			}

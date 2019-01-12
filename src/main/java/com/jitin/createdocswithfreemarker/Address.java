@@ -1,4 +1,4 @@
-package com.jitin.createdocswithfreemarker.model;
+package com.jitin.createdocswithfreemarker;
 
 public class Address {
 	private String street;

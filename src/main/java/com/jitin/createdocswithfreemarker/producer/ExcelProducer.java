@@ -13,27 +13,28 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.jitin.createdocswithfreemarker.exception.DocumentGeneratorException;
-import com.jitin.createdocswithfreemarker.utility.Constants;
+import com.jitin.createdocswithfreemarker.model.DocumentRequest;
+import com.jitin.createdocswithfreemarker.utility.DocumentGeneratorConstants;
 
 public class ExcelProducer implements DocumentProducer {
 
-	public byte[] generateDocumentFromProcessedText(String processedText, String watermark) {
-		Document document = Jsoup.parse(processedText);
-		Elements tables = document.getElementsByTag(Constants.HTML_TABLE);
+	public byte[] generateDocumentFromProcessedText(DocumentRequest documentRequest) {
+		Document document = Jsoup.parse(documentRequest.getProcessedText());
+		Elements tables = document.getElementsByTag(DocumentGeneratorConstants.HTML_TABLE);
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		HSSFSheet sheet = workbook.createSheet(Constants.EXCEL_SHEET);
+		HSSFSheet sheet = workbook.createSheet(DocumentGeneratorConstants.EXCEL_SHEET);
 		int rowCounter = 0;
 		for (Element table : tables) {
-			Elements rows = table.select(Constants.HTML_TABLE_ROW);
+			Elements rows = table.select(DocumentGeneratorConstants.HTML_TABLE_ROW);
 			if (!rows.isEmpty()) {
 				int i = 0;
-				Elements tableHeders = rows.select(Constants.HTML_TABLE_HEADER);
+				Elements tableHeders = rows.select(DocumentGeneratorConstants.HTML_TABLE_HEADER);
 				if (!tableHeders.isEmpty()) {
 					writeCells(sheet, tableHeders, rowCounter++);
 					i = 1;
 				}
 				for (; i < rows.size(); i++) {
-					Elements cells = rows.get(i).select(Constants.HTML_TABLE_DATA);
+					Elements cells = rows.get(i).select(DocumentGeneratorConstants.HTML_TABLE_DATA);
 					writeCells(sheet, cells, rowCounter++);
 				}
 			}
@@ -42,7 +43,6 @@ public class ExcelProducer implements DocumentProducer {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		try {
 			workbook.write(byteArrayOutputStream);
-			System.out.println("Excel file has been successfully written!");
 		} catch (Exception e) {
 			System.out.println("Error occurred : " + e);
 			throw new DocumentGeneratorException("Error while creating excel!");

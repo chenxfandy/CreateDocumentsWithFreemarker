@@ -1,7 +1,7 @@
 package com.jitin.createdocswithfreemarker.templateprocessor;
 
-import com.jitin.createdocswithfreemarker.model.DocumentRequest;
+import com.jitin.createdocswithfreemarker.model.TemplateEngine;
 
 public interface TemplateProcessor {
-	public String getProcessedText(DocumentRequest documentRequestDTO);
+	public String getProcessedText(TemplateEngine templateEngine);
 }
