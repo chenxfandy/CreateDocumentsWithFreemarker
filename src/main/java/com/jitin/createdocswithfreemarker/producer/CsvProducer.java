@@ -56,7 +56,8 @@ public class CsvProducer implements DocumentProducer {
 	private void writeData(Writer writer, Elements cells) {
 		try {
 			for (Element cell : cells) {
-				writer.write(cell.text().concat(", "));
+				//writer.write(cell.text().concat(", ")); //--Text without double quotes.
+				writer.write("\""+cell.text()+"\"".concat(", ")); //--Enclose text within double quotes.
 			}
 			writer.write("\n");
 		} catch (Exception e) {
